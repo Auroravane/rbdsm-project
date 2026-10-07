@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
+import API_BASE_URL from "../config";
 
 const diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
 
@@ -119,8 +120,8 @@ function Dashboard() {
         }
 
         const [gamesResponse, borrowedResponse] = await Promise.all([
-          fetch(`http://localhost:5000/api/games/${storedUser.id}`),
-          fetch(`http://localhost:5000/api/borrowed/${storedUser.id}`),
+          fetch(`${API_BASE_URL}/api/games/${storedUser.id}`),
+          fetch(`${API_BASE_URL}/api/borrowed/${storedUser.id}`),
         ]);
         const [gamesData, borrowedData] = await Promise.all([
           gamesResponse.json(),

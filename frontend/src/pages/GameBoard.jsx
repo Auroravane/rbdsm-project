@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import API_BASE_URL from "../config";
 
 const chessStart = [
   ["♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"],
@@ -234,7 +235,7 @@ function GameBoard() {
       try {
         const user = JSON.parse(localStorage.getItem("boardnightUser") || "null");
         if (!user?.id) throw new Error("Please log in to open a game board.");
-        const response = await fetch(`http://localhost:5000/api/games/${user.id}`);
+        const response = await fetch(`${API_BASE_URL}/api/games/${user.id}`);
         const data = await response.json();
         if (!response.ok || !data.success) throw new Error(data.message || "Unable to load your games.");
         const selectedGame = data.games.find((item) => String(item.id) === gameId);

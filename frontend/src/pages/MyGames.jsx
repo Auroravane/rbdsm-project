@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import API_BASE_URL from "../config";
 
 function MyGames() {
   const navigate = useNavigate();
@@ -134,7 +135,7 @@ function MyGames() {
       setError("");
 
       const response = await fetch(
-        `http://localhost:5000/api/games/${user.id}`
+        `${API_BASE_URL}/api/games/${user.id}`
       );
 
       const data = await response.json();
@@ -320,7 +321,7 @@ function MyGames() {
 
       if (editingGame) {
         const response = await fetch(
-          `http://localhost:5000/api/games/${editingGame.id}`,
+          `${API_BASE_URL}/api/games/${editingGame.id}`,
           {
             method: "PUT",
             headers: {
@@ -379,7 +380,7 @@ function MyGames() {
       // ========================================
 
       const response = await fetch(
-        "http://localhost:5000/api/games",
+        `${API_BASE_URL}/api/games`,
         {
           method: "POST",
           headers: {
@@ -466,7 +467,7 @@ function MyGames() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/games/${id}?userId=${user.id}`,
+        `${API_BASE_URL}/api/games/${id}?userId=${user.id}`,
         {
           method: "DELETE",
         }

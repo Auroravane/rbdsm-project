@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import API_BASE_URL from "../config";
 
 function getStoredUser() {
   try {
@@ -30,8 +31,8 @@ function Borrowed() {
     if (!user?.id) throw new Error("Please log in to manage borrowed games.");
 
     const [gamesResponse, borrowedResponse] = await Promise.all([
-      fetch(`http://localhost:5000/api/games/${user.id}`),
-      fetch(`http://localhost:5000/api/borrowed/${user.id}`),
+      fetch(`${API_BASE_URL}/api/games/${user.id}`),
+      fetch(`${API_BASE_URL}/api/borrowed/${user.id}`),
     ]);
     const [gamesData, borrowedData] = await Promise.all([
       gamesResponse.json(),
@@ -115,7 +116,7 @@ function Borrowed() {
     try {
       setSaving(true);
       setError("");
-      const response = await fetch("http://localhost:5000/api/borrowed", {
+      const response = await fetch(`${API_BASE_URL}/api/borrowed`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -153,7 +154,7 @@ function Borrowed() {
     try {
       setError("");
       const response = await fetch(
-        `http://localhost:5000/api/borrowed/${id}${markReturned ? "/return" : `?userId=${user.id}`}`,
+        `${API_BASE_URL}/api/borrowed/${id}${markReturned ? "/return" : `?userId=${user.id}`}`,
         {
           method: markReturned ? "PUT" : "DELETE",
           ...(markReturned && {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import API_BASE_URL from "../config";
 
 const starterGames = [
   { name: "Wingspan", description: "Build a thriving wildlife preserve in this relaxing engine-building game.", minPlayers: 1, maxPlayers: 5, playTimeMinutes: 70, category: "Strategy" },
@@ -78,7 +79,7 @@ function GamePlanner() {
       setError("");
 
       const response = await fetch(
-        `http://localhost:5000/api/game-nights/${user.id}`
+        `${API_BASE_URL}/api/game-nights/${user.id}`
       );
 
       const data = await response.json();
@@ -121,7 +122,7 @@ function GamePlanner() {
       setGamesLoading(true);
 
       const response = await fetch(
-        `http://localhost:5000/api/games/${user.id}`
+        `${API_BASE_URL}/api/games/${user.id}`
       );
 
       const data = await response.json();
@@ -164,7 +165,7 @@ function GamePlanner() {
 
     try {
       for (const game of missingGames) {
-        const response = await fetch("http://localhost:5000/api/games", {
+        const response = await fetch(`${API_BASE_URL}/api/games`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ ...game, userId: user.id, status: "available" }),
@@ -406,7 +407,7 @@ function GamePlanner() {
 
       if (editingEvent) {
         const response = await fetch(
-          `http://localhost:5000/api/game-nights/${editingEvent.id}`,
+          `${API_BASE_URL}/api/game-nights/${editingEvent.id}`,
           {
             method: "PUT",
             headers: {
@@ -441,7 +442,7 @@ function GamePlanner() {
       // ========================================
 
       const response = await fetch(
-        "http://localhost:5000/api/game-nights",
+        `${API_BASE_URL}/api/game-nights`,
         {
           method: "POST",
           headers: {
@@ -511,7 +512,7 @@ function GamePlanner() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/game-nights/${id}?userId=${user.id}`,
+        `${API_BASE_URL}/api/game-nights/${id}?userId=${user.id}`,
         {
           method: "DELETE",
         }

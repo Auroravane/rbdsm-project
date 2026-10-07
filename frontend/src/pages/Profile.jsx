@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import API_BASE_URL from "../config";
 import "./Profile.css";
 
 function Profile() {
@@ -78,7 +79,7 @@ function Profile() {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/auth/login-history/${user.id}`
+          `${API_BASE_URL}/api/auth/login-history/${user.id}`
         );
 
         const data = await response.json();
@@ -175,7 +176,7 @@ function Profile() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/change-password",
+        `${API_BASE_URL}/api/auth/change-password`,
         {
           method: "PUT",
           headers: {

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import AmbientStarfield from "../components/AmbientStarfield";
+import API_BASE_URL from "../config";
 
 const BACKGROUND_VIDEO =
   "https://cdn.21st.dev/assets/mirror/38/38f6c913209f4092ea0643267302c0b4873f6aeb56deeb59ead88c794340e84d.mp4";
@@ -80,7 +81,7 @@ function Login() {
 
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
