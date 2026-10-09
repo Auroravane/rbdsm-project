@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 
 // Connect to the backend
-const socket = io('http://localhost:3000'); 
+const socket = io(API_BASE_URL); 
 
 export default function Chat({ currentUser }) {
   const [targetEmail, setTargetEmail] = useState('');
@@ -22,7 +23,7 @@ export default function Chat({ currentUser }) {
 
   // Initiate chat via email
   const startChat = async () => {
-    const response = await axios.post('/api/chat/start', {
+    const response = await axios.post(`${API_BASE_URL}/api/chat/start`, {
       targetEmail,
       currentUserId: currentUser.id
     });

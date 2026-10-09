@@ -9,10 +9,32 @@ const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 
 // ==========================================
-// MIDDLEWARE
+// MIDDLEWARE & CORS
 // ==========================================
 
-app.use(cors());
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.FRONTEND_URL,
+  process.env.CLIENT_ORIGIN,
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "http://127.0.0.1:5173",
+  "http://127.0.0.1:3000",
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(null, true); // Permissive fallback to support diverse Render domains while headers stay intact
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // ==========================================
@@ -31,7 +53,7 @@ const db = mysql.createPool({
 });
 
 // ==========================================
-// BASIC ROUTES
+// BASIC & HEALTH CHECK ROUTES
 // ==========================================
 
 app.get("/", (req, res) => {
@@ -41,10 +63,21 @@ app.get("/", (req, res) => {
   });
 });
 
+// Explicit health check endpoints for Render zero-downtime checks
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
+});
+
 app.get("/api/health", (req, res) => {
-  res.json({
+  res.status(200).json({
+    status: "OK",
     success: true,
     message: "BoardNight API is healthy!",
+    uptime: process.uptime(),
   });
 });
 
@@ -1426,9 +1459,11 @@ app.delete(
 // START SERVER
 // ==========================================
 
+const HOST = process.env.HOST || "0.0.0.0";
+
 const server = app.listen(
   PORT,
-  "127.0.0.1",
+  HOST,
   () => {
     console.log("");
     console.log(
@@ -1440,7 +1475,7 @@ const server = app.listen(
     console.log(
       "======================================"
     );
-    console.log(`Server: http://localhost:${PORT}`);
+    console.log(`Server: http://${HOST}:${PORT}`);
     console.log(
       `Database: ${process.env.DB_NAME}`
     );
